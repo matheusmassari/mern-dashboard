@@ -1,5 +1,13 @@
+import User from "../models/User.js";
+import { BadRequestError, NotFoundError } from "../errors/index.js";
+
 const register = async (req, res) => {
-    res.send("register user");
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+        throw new BadRequestError("Please fill all the fields.");
+    }
+    const user = await User.create({ name, email, password });
+    res.status(StatusCodes.CREATED).json({ user });
 };
 
 const login = async (req, res) => {
