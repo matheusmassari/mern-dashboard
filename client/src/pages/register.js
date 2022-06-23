@@ -1,18 +1,12 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import { Grid } from "@chakra-ui/react";
 
-import LoginForm from "../components/forms/loginForm";
-import RegisterForm from "../components/forms/registerForm";
+import LoginForm from "../components/forms/LoginForm";
+import RegisterForm from "../components/forms/RegisterForm";
 
 const RegisterPage = () => {
     const [isMember, setIsMember] = useState(true);
-
     const toggleMember = () => setIsMember(!isMember);
-
-    const submitUser = (data) => {
-        console.log(data);
-    };
 
     return (
         <Grid minH="95vh" alignItems="center">

@@ -11,12 +11,12 @@ module.exports = {
             },
         ];
     },
-    rewrites: async () => {
-        return [
-            {
-                source: "/:path*", // -> http://localhost:4000/api/v1
-                destination: "http://localhost:4000/:path*",
-            },
-        ];
-    },
+    // rewrites: async () => {
+    //     return [
+    //         {
+    //             source: "/:path*", // -> http://localhost:4000/api/v1
+    //             destination: "http://localhost:4000/:path*",
+    //         },
+    //     ];
+    // },
 };

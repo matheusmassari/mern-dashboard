@@ -16,24 +16,32 @@ import {
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../../utils/loginSchema";
+import { useAppContext } from "../../context/appContext";
 
 const LoginForm = ({ toggleMember }) => {
+    const { isLoading, registerUser } = useAppContext();
 
-     const {
-         register,
-         handleSubmit,
-         formState: { errors },
-     } = useForm({
-         resolver: yupResolver(loginSchema),
-         mode: "onBlur",
-     });
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(loginSchema),
+        mode: "onBlur",
+    });
 
-     const loginUser = (data) => {
-         console.log(data);
-     };
+    const registrationSubmit = (data) => {
+        const { username, password, email } = data;
+        const currentUser = { username, password, email };
+        if (isMember) {
+            console.log("This username already exists.");
+        } else {
+            registerUser(currentUser);
+        }
+    };
 
     return (
-        <form>
+        <form onSubmit={handleSubmit(registrationSubmit)}>
             <Container
                 borderTop="6px solid"
                 borderTopColor="blue.500"
@@ -78,7 +86,6 @@ const LoginForm = ({ toggleMember }) => {
                         colorScheme="blue"
                         w="100%"
                         type="submit"
-                        onClick={handleSubmit(loginUser)}
                         disabled={!!errors.email || !!errors.password}
                     >
                         Submit

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import {
     Container,
     Center,
@@ -12,28 +13,48 @@ import {
     FormErrorMessage,
     Button,
     Box,
+    Spinner,
+    Alert,
+    AlertIcon,
+    AlertTitle,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../../utils/registerSchema";
+import { useAppContext } from "../../context/appContext";
 
 const RegisterForm = ({ toggleMember }) => {
+    const { user, isLoading, registerUser, showAlert, alertText } =
+        useAppContext();
+    const [isMember, setIsMember] = useState(false);
+    const router = useRouter();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(registerSchema),
+        mode: "onBlur",
+    });
 
-        const {
-            register,
-            handleSubmit,
-            formState: { errors },
-        } = useForm({
-            resolver: yupResolver(registerSchema),
-            mode: "onBlur",
-        });
+    const registrationSubmit = (data) => {
+        const { username: name, password, email } = data;
+        const currentUser = { name, password, email };
+        if (isMember) {
+            console.log("This username already exists.");
+        } else {
+            registerUser(currentUser);
+        }
+    };
 
-        const registerUser = (data) => {
-            console.log(data);
-        };
+    useEffect(() => {
+        if (user) {
+            router.push("/dashboard");
+        }
+    }, [user]);
 
     return (
-        <form>
+        <form onSubmit={handleSubmit(registrationSubmit)}>
             <Container
                 borderTop="6px solid"
                 borderTopColor="blue.500"
@@ -51,6 +72,12 @@ const RegisterForm = ({ toggleMember }) => {
                     Register
                 </Heading>
                 <VStack spacing={10}>
+                    {showAlert && (
+                        <Alert status="error">
+                            <AlertIcon />
+                            <AlertTitle>{alertText}</AlertTitle>
+                        </Alert>
+                    )}
                     <FormControl isRequired isInvalid={errors.username}>
                         <FormLabel htmlFor="username">Username</FormLabel>
                         <Input
@@ -89,7 +116,6 @@ const RegisterForm = ({ toggleMember }) => {
                         colorScheme="blue"
                         w="100%"
                         type="submit"
-                        onClick={handleSubmit(registerUser)}
                         disabled={
                             !!errors.email ||
                             !!errors.password ||
@@ -112,6 +138,15 @@ const RegisterForm = ({ toggleMember }) => {
                             </Button>
                         </Text>
                     </Box>
+                    {isLoading && (
+                        <Spinner
+                            thickness="4px"
+                            speed="0.65s"
+                            emptyColor="gray.200"
+                            color="blue.500"
+                            size="xl"
+                        />
+                    )}
                 </VStack>
             </Container>
         </form>
