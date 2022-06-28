@@ -3,6 +3,9 @@ import {
     REGISTER_USER_BEGIN,
     REGISTER_USER_ERROR,
     REGISTER_USER_SUCCESS,
+    LOGIN_USER_BEGIN,
+    LOGIN_USER_SUCCESS,
+    LOGIN_USER_ERROR,
 } from "./actions";
 
 const reducer = (state, action) => {
@@ -24,12 +27,33 @@ const reducer = (state, action) => {
             user: action.payload.user,
             token: action.payload.token,
             userLocation: action.payload.userLoaction,
-            jobLocation: action.payload.jobLocation,
+            jobLocation: action.payload.userLocation,
             isLoading: false,
         };
     }
     if (action.type === REGISTER_USER_ERROR) {
-        console.log("erro do reducer: nao foi possivel registrar usuario");
+        return {
+            ...state,
+            isLoading: false,
+            showAlert: true,
+            alertType: "danger",
+            alertText: action.payload.msg,
+        };
+    }
+    if (action.type === LOGIN_USER_BEGIN) {
+        return { ...state, isLoading: true };
+    }
+    if (action.type === LOGIN_USER_SUCCESS) {
+        return {
+            ...state,
+            isLoading: false,
+            user: action.payload.user,
+            token: action.payload.token,
+            userLocation: action.payload.token,
+            jobLocation: action.payload.userLocation,
+        };
+    }
+    if (action.type === LOGIN_USER_ERROR) {
         return {
             ...state,
             isLoading: false,

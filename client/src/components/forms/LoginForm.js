@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Router, { useRouter } from "next/router";
 import {
     Container,
     Center,
@@ -12,6 +13,10 @@ import {
     FormErrorMessage,
     Button,
     Box,
+    Spinner,
+    Alert,
+    AlertIcon,
+    AlertTitle,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,8 +24,9 @@ import { loginSchema } from "../../utils/loginSchema";
 import { useAppContext } from "../../context/appContext";
 
 const LoginForm = ({ toggleMember }) => {
-    const { isLoading, registerUser } = useAppContext();
-
+    const { user, isLoading, loginUser, showAlert, alertText } =
+        useAppContext();
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -30,18 +36,21 @@ const LoginForm = ({ toggleMember }) => {
         mode: "onBlur",
     });
 
-    const registrationSubmit = (data) => {
-        const { username, password, email } = data;
-        const currentUser = { username, password, email };
-        if (isMember) {
-            console.log("This username already exists.");
-        } else {
-            registerUser(currentUser);
-        }
+    const loginSubmit = (data) => {
+        const user = "";
+        const { password, email } = data;
+        const currentUser = { user, password, email };
+        loginUser(currentUser);
     };
 
+    useEffect(() => {
+        if (user) {
+            router.push("/dashboard");
+        }
+    }, [user]);
+
     return (
-        <form onSubmit={handleSubmit(registrationSubmit)}>
+        <form onSubmit={handleSubmit(loginSubmit)}>
             <Container
                 borderTop="6px solid"
                 borderTopColor="blue.500"
@@ -59,6 +68,12 @@ const LoginForm = ({ toggleMember }) => {
                     Login
                 </Heading>
                 <VStack spacing={10}>
+                    {showAlert && (
+                        <Alert status="error">
+                            <AlertIcon />
+                            <AlertTitle>{alertText}</AlertTitle>
+                        </Alert>
+                    )}
                     <FormControl isRequired isInvalid={errors.email}>
                         <FormLabel htmlFor="email">Email</FormLabel>
                         <Input
@@ -104,6 +119,15 @@ const LoginForm = ({ toggleMember }) => {
                             </Button>
                         </Text>
                     </Box>
+                    {isLoading && (
+                        <Spinner
+                            thickness="4px"
+                            speed="0.65s"
+                            emptyColor="gray.200"
+                            color="blue.500"
+                            size="xl"
+                        />
+                    )}
                 </VStack>
             </Container>
         </form>

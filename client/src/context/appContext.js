@@ -5,8 +5,12 @@ import {
     REGISTER_USER_BEGIN,
     REGISTER_USER_ERROR,
     REGISTER_USER_SUCCESS,
+    LOGIN_USER_BEGIN,
+    LOGIN_USER_SUCCESS,
+    LOGIN_USER_ERROR,
     LOCALSTORAGE_INIT,
 } from "./actions";
+import useStorage from "../utils/useStorage";
 
 export const initialState = {
     isLoading: false,
@@ -22,6 +26,7 @@ export const initialState = {
 const AppContext = createContext();
 const AppProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [user, setItem] = useStorage("user", {});
 
     const registerUser = async (currentUser) => {
         dispatch({ type: REGISTER_USER_BEGIN });
@@ -37,10 +42,35 @@ const AppProvider = ({ children }) => {
                 payload: { user, token, location },
             });
             addUserToLocalStorage({ user, token, location });
+            // setItem("user", { user, token, location });
         } catch (error) {
             console.log(error.response);
             dispatch({
                 type: REGISTER_USER_ERROR,
+                payload: { msg: error.response.data.msg },
+            });
+        }
+    };
+
+    const loginUser = async (currentUser) => {
+        dispatch({ type: LOGIN_USER_BEGIN });
+        try {
+            const response = await axios.post(
+                "http://localhost:4000/api/v1/auth/login",
+                currentUser
+            );
+            console.log(response);
+            const { user, token, location } = response.data;
+            dispatch({
+                type: LOGIN_USER_SUCCESS,
+                payload: { user, token, location },
+            });
+            // setItem({ user, token, location });
+            addUserToLocalStorage({ user, token, location });
+        } catch (error) {
+            console.log(error.response);
+            dispatch({
+                type: LOGIN_USER_ERROR,
                 payload: { msg: error.response.data.msg },
             });
         }
@@ -59,13 +89,20 @@ const AppProvider = ({ children }) => {
     };
 
     // Local Storage Inicialização
-    useEffect(() => {        
+    useEffect(() => {
+        // const user = getItem("user");
+        // const token = getItem("token");
+        // const userLocation = getItem("location");
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
         const userLocation = localStorage.getItem("location");
         dispatch({
             type: LOCALSTORAGE_INIT,
-            payload: { token, user, userLocation },
+            payload: {
+                token,
+                user,
+                userLocation,
+            },
         });
     }, []);
 
@@ -74,6 +111,7 @@ const AppProvider = ({ children }) => {
             value={{
                 ...state,
                 registerUser,
+                loginUser,
             }}
         >
             {children}
