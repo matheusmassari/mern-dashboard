@@ -35,10 +35,10 @@ import { MdOutlineAddTask } from "react-icons/md";
 import Link from "next/link";
 
 const LinkItems = [
-    { name: "Home", icon: FiHome, url: "/" },
-    { name: "Waive Tasks", icon: FiFlag, url: "/waive" },
-    { name: "Create Tasks", icon: MdOutlineAddTask, url: "/create" },
-    { name: "Settings", icon: FiSettings, url: "/settings" },
+    { name: "Stats", icon: FiHome, url: "/dashboard" },
+    { name: "All Jobs", icon: FiFlag, url: "/dashboard/all-jobs" },
+    { name: "Add Job", icon: MdOutlineAddTask, url: "/dashboard/add-job" },
+    { name: "Profile", icon: FiSettings, url: "/dashboard/profile" },
 ];
 
 export default function SidebarWithHeader({ children }) {
