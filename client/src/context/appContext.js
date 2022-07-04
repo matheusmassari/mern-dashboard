@@ -26,7 +26,7 @@ export const initialState = {
 const AppContext = createContext();
 const AppProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [user, setItem] = useStorage("user", {});
+    
 
     const registerUser = async (currentUser) => {
         dispatch({ type: REGISTER_USER_BEGIN });
@@ -76,6 +76,10 @@ const AppProvider = ({ children }) => {
         }
     };
 
+    const updateUser = async (currentUser) => {
+        console.log(currentUser)
+    }
+
     const addUserToLocalStorage = ({ user, token, location }) => {
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("token", token);
@@ -112,6 +116,7 @@ const AppProvider = ({ children }) => {
                 ...state,
                 registerUser,
                 loginUser,
+                updateUser,
             }}
         >
             {children}

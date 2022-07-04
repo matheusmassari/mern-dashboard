@@ -114,6 +114,7 @@ const LoginForm = ({ toggleMember }) => {
                                 py="0"
                                 color="blue.500"
                                 onClick={toggleMember}
+                                mb="0.25rem"
                             >
                                 Register.
                             </Button>
