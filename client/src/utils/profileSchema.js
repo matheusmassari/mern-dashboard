@@ -7,14 +7,14 @@ export const profileSchema = yup
             .string("Não deve conter caracteres especiais")
             .required("Campo obrigatório")
             .matches(
-                /^[a-zA-Z0-9]{4,10}$/,
+                /^[a-zA-Z\u00C0-\u00FF]*$/,
                 "Seu nome não pode conter caracteres especiais."
             ),
         lastName: yup
             .string("Não deve conter caracteres especiais")
             .required("Campo obrigatório")
             .matches(
-                /^[a-zA-Z ]*$/,
+                /^[a-zA-Z\u00C0-\u00FF]*$/,
                 "Seu sobrenome não pode conter caracteres especiais."
             ),
         email: yup
@@ -25,8 +25,8 @@ export const profileSchema = yup
             .string("Não deve conter caracteres especiais")
             .required("Campo obrigatório")
             .matches(
-                /^[a-zA-Z ]*$/,
-                "Seu sobrenome não pode conter caracteres especiais."
+                /^[a-zA-Z \u00C0-\u00FF]*$/,
+                "Local não pode conter caracteres especiais."
             ),
     })
     .required();

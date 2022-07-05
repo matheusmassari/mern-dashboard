@@ -97,7 +97,7 @@ const ProfilePageForm = () => {
                             {...register("location")}
                         />
                         <FormErrorMessage>
-                            {errors?.name?.message}
+                            {errors?.location?.message}
                         </FormErrorMessage>
                     </FormControl>
 
