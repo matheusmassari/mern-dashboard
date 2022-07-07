@@ -103,7 +103,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
                             src="jobstation-logo.svg"
                             ml={"1rem"}
                             h={"5rem"}
-                            alt="Scriptask Logo"
+                            alt="JobStation Logo"
                         />
                         <CloseButton
                             display={{ base: "flex", md: "none" }}
