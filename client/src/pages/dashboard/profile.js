@@ -13,7 +13,7 @@ const ProfilePage = () => {
         if (!user) {
             router.push("/register");
         }
-    }, []);
+    }, [user]);
 
     return <ProfilePageForm />;
 };

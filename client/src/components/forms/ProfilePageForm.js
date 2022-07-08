@@ -17,9 +17,9 @@ import { useAppContext } from "../../context/appContext";
 import CustomToast from "../feedback/CustomToast";
 
 const ProfilePageForm = () => {
-    const { user, updateUser, isLoading, showAlert, alertText } =
+    const { user, updateUser, isLoading, showAlert, alertType } =
         useAppContext();
-    const toast = useToast();
+    
 
     const {
         register,
@@ -33,7 +33,6 @@ const ProfilePageForm = () => {
     const profileSubmit = (data) => {
         updateUser(data);
     };
-    
 
     return (
         <>
@@ -115,10 +114,9 @@ const ProfilePageForm = () => {
                     </SimpleGrid>
                 </Box>
             </form>
-            {showAlert && <CustomToast />}
+            {showAlert && <CustomToast alertType={alertType} />}
         </>
     );
-    
 };
 
 export default ProfilePageForm;

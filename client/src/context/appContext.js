@@ -13,6 +13,7 @@ import {
     UPDATE_USER_ERROR,
     LOCALSTORAGE_INIT,
     CLEAR_ALERT,
+    LOGOUT_USER,
 } from "./actions";
 
 export const initialState = {
@@ -50,10 +51,10 @@ const AppProvider = ({ children }) => {
         (response) => {
             return response;
         },
-        (error) => {
-            console.log(error.response);
+        (error) => {            
+            console.log(error)
             if (error.response.status === 401) {
-                console.log("AUTH ERROR");
+                logoutUser();
             }
             return Promise.reject(error);
         }
@@ -108,6 +109,11 @@ const AppProvider = ({ children }) => {
         }
     };
 
+    const logoutUser = () => {
+        dispatch({ type: LOGOUT_USER });
+        removeUserFromLocalStorage()
+    };
+
     const updateUser = async (currentUser) => {
         dispatch({ type: UPDATE_USER_BEGIN });
         try {
@@ -136,7 +142,7 @@ const AppProvider = ({ children }) => {
         localStorage.setItem("location", location);
     };
 
-    const removeUserFromLocalStorage = ({}) => {
+    const removeUserFromLocalStorage = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         localStorage.removeItem("location");

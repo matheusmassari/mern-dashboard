@@ -11,7 +11,7 @@ const StatsPage = () => {
         if (!user) {
             router.push("/register");
         }
-    }, []);
+    }, [user]);
     return <div>StatsPage</div>;
 };
 

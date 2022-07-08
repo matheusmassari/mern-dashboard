@@ -12,7 +12,7 @@ const Dashboard = () => {
         if (!user) {
             router.push("/register")
         }
-    }, []);
+    }, [user]);
 
     return (
         <>

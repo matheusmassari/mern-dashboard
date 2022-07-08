@@ -10,6 +10,7 @@ import {
     UPDATE_USER_SUCCESS,
     UPDATE_USER_ERROR,
     CLEAR_ALERT,
+    LOGOUT_USER,
 } from "./actions";
 
 const reducer = (state, action) => {
@@ -72,6 +73,19 @@ const reducer = (state, action) => {
             showAlert: true,
             alertType: "danger",
             alertText: action.payload.msg,
+        };
+    }
+    if (action.type === LOGOUT_USER) {
+        return {
+            ...state,
+            isLoading: false,
+            showAlert: false,
+            alertText: "",
+            alertType: "",
+            user: null,
+            token: null,
+            userLocation: "",
+            jobLocation: "",
         };
     }
     if (action.type === UPDATE_USER_BEGIN) {

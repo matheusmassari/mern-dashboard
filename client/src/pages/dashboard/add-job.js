@@ -11,7 +11,7 @@ const AddJobPage = () => {
         if (!user) {
             router.push("/register");
         }
-    }, []);
+    }, [user]);
     return <div>AddJobPage</div>;
 };
 
