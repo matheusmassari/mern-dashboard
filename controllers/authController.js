@@ -1,9 +1,5 @@
 import User from "../models/User.js";
-import {
-    BadRequestError,
-    NotFoundError,
-    UnauthenticatedError,
-} from "../errors/index.js";
+import { BadRequestError, UnauthenticatedError } from "../errors/index.js";
 import { StatusCodes } from "http-status-codes";
 
 const register = async (req, res) => {

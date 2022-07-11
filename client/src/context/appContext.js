@@ -24,7 +24,16 @@ export const initialState = {
     user: null,
     token: null,
     userLocation: "",
+    // Job block
+    isEditing: false,
+    editJobId: "",
+    position: "",
+    company: "",
+    jobTypeOptions: ["Full-time", "Part-time", "Remote", "Internship"],
+    jobType: "full-time",
     jobLocation: "",
+    statusOptions: ["Interview", "Declined", "Pending"],
+    status: "pending",
 };
 
 const AppContext = createContext();
@@ -178,7 +187,7 @@ const AppProvider = ({ children }) => {
                 ...state,
                 registerUser,
                 loginUser,
-                updateUser,
+                updateUser,               
             }}
         >
             {children}
