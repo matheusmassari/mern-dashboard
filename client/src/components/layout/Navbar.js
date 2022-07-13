@@ -33,6 +33,7 @@ import {
 import { MdOutlineAddTask } from "react-icons/md";
 // import Image from "next/image";
 import Link from "next/link";
+import { useAppContext } from "../../context/appContext";
 
 const LinkItems = [
     { name: "Stats", icon: FiHome, url: "/dashboard" },
@@ -43,7 +44,7 @@ const LinkItems = [
 
 export default function SidebarWithHeader({ children }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-
+    const { logoutUser } = useAppContext();
     return (
         <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
             <SidebarContent
@@ -65,7 +66,7 @@ export default function SidebarWithHeader({ children }) {
                 </DrawerContent>
             </Drawer>
             {/* mobilenav */}
-            <MobileNav onOpen={onOpen} />
+            <MobileNav onOpen={onOpen} logoutUser={logoutUser} />
             <Box ml={{ base: 0, md: 60 }} p="4">
                 {children}
             </Box>
@@ -162,7 +163,7 @@ const NavItem = ({ icon, children, url, ...rest }) => {
     );
 };
 
-const MobileNav = ({ onOpen, ...rest }) => {
+const MobileNav = ({ onOpen, logoutUser, ...rest }) => {
     return (
         <Flex
             ml={{ base: 0, md: 60 }}
@@ -230,7 +231,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
                         >
                             {/* <MenuItem>Target: {cdsid}</MenuItem> */}
                             <MenuDivider />
-                            <MenuItem>Sign out</MenuItem>
+                            <MenuItem onClick={() => logoutUser()} >Sign out</MenuItem>
                         </MenuList>
                     </Menu>
                 </Flex>

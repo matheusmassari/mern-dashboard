@@ -18,17 +18,20 @@ import CustomToast from "../feedback/CustomToast";
 
 const AddJobForm = () => {
     const {
-        user,
         isLoading,
         showAlert,
         alertType,
+        alertText,
         jobTypeOptions,
         statusOptions,
+        isEditing,
+        createJob,
     } = useAppContext();
 
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(addJobSchema),
@@ -36,7 +39,12 @@ const AddJobForm = () => {
     });
 
     const addJobSubmit = (data) => {
-        console.log(data);
+        if (isEditing) {
+            // Eventually editJob();
+            return;
+        }
+        createJob(data);
+        reset();
     };
 
     return (
@@ -94,8 +102,8 @@ const AddJobForm = () => {
                         <FormControl isRequired isInvalid={errors.location}>
                             <FormLabel htmlFor="status">Status</FormLabel>
                             <Select id="status" {...register("status")}>
-                                {statusOptions.map((optionValue) => (
-                                    <option value={optionValue}>
+                                {statusOptions.map((optionValue, index) => (
+                                    <option value={optionValue} key={index}>
                                         {optionValue}
                                     </option>
                                 ))}
@@ -125,6 +133,7 @@ const AddJobForm = () => {
                             mt="2rem"
                             type="submit"
                             disabled={
+                                isLoading ||
                                 !!errors.position ||
                                 !!errors.company ||
                                 !!errors.jobLocation ||
@@ -137,7 +146,9 @@ const AddJobForm = () => {
                     </SimpleGrid>
                 </Box>
             </form>
-            {showAlert && <CustomToast alertType={alertType} />}
+            {showAlert && (
+                <CustomToast alertType={alertType} alertText={alertText} />
+            )}
         </>
     );
 };

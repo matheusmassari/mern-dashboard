@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useState } from "react";
 
-function CustomToast({ alertType }) {
+function CustomToast({ alertType, alertText }) {
     const toast = useToast();
     const [id, setId] = useState("test");
 
@@ -10,8 +10,8 @@ function CustomToast({ alertType }) {
             toast({
                 id,
                 position: "top",
-                title: "Profile Updated.",
-                description: "Your profile has been successfully updated.",
+                title: alertText,
+                // description: "Your profile has been successfully updated.",
                 status: "success",
                 duration: 9000,
                 isClosable: true,

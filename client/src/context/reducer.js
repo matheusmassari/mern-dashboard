@@ -10,7 +10,12 @@ import {
     UPDATE_USER_SUCCESS,
     UPDATE_USER_ERROR,
     CLEAR_ALERT,
+    CLEAR_VALUES,
     LOGOUT_USER,
+    CREATE_JOB_BEGIN,
+    c,
+    CREATE_JOB_ERROR,
+    CREATE_JOB_SUCCESS,
 } from "./actions";
 
 const reducer = (state, action) => {
@@ -23,13 +28,28 @@ const reducer = (state, action) => {
             jobLocation: action.payload.userLocation || "",
         };
     }
-    if(action.type === CLEAR_ALERT) {
+    if (action.type === CLEAR_ALERT) {
         return {
             ...state,
             showAlert: false,
             alertType: "",
-            alertText: ""
-        }
+            alertText: "",
+        };
+    }
+    if (action.type === CLEAR_VALUES) {
+        const initialState = {
+            isEditing: false,
+            editJobId: "",
+            position: "",
+            company: "",
+            jobLocation: state.userLocation,
+            jobType: "Full-time",
+            status: "Pending",
+        };
+        return {
+            ...state,
+            ...initialState,
+        };
     }
     if (action.type === REGISTER_USER_BEGIN) {
         return { ...state, isLoading: true };
@@ -112,6 +132,30 @@ const reducer = (state, action) => {
             alertType: "danger",
             alertText: action.payload.msg,
         };
+    }
+    if (action.type === CREATE_JOB_BEGIN) {
+        return {
+            ...state,
+            isLoading: true,
+        };
+    }
+    if (action.type === CREATE_JOB_SUCCESS) {
+        return {
+            ...state,
+            isLoading: false,
+            showAlert: true,
+            alertType: "success",
+            alertText: "New Job Created",
+        };
+    }
+    if (action.type === CREATE_JOB_ERROR) {
+         return {
+             ...state,
+             isLoading: false,
+             showAlert: true,
+             alertType: "danger",
+             alertText: action.payload.msg,
+         };
     }
     throw new Error(`No such action: ${action.type}`);
 };

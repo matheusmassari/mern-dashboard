@@ -13,7 +13,11 @@ import {
     UPDATE_USER_ERROR,
     LOCALSTORAGE_INIT,
     CLEAR_ALERT,
+    CLEAR_VALUES,
     LOGOUT_USER,
+    CREATE_JOB_BEGIN,
+    CREATE_JOB_SUCCESS,
+    CREATE_JOB_ERROR,
 } from "./actions";
 
 export const initialState = {
@@ -60,8 +64,8 @@ const AppProvider = ({ children }) => {
         (response) => {
             return response;
         },
-        (error) => {            
-            console.log(error)
+        (error) => {
+            console.log(error);
             if (error.response.status === 401) {
                 logoutUser();
             }
@@ -120,7 +124,7 @@ const AppProvider = ({ children }) => {
 
     const logoutUser = () => {
         dispatch({ type: LOGOUT_USER });
-        removeUserFromLocalStorage()
+        removeUserFromLocalStorage();
     };
 
     const updateUser = async (currentUser) => {
@@ -163,6 +167,32 @@ const AppProvider = ({ children }) => {
         }, 3000);
     };
 
+    const createJob = async (data) => {        
+        dispatch({type: CREATE_JOB_BEGIN });
+        try {
+            const { user } = state;            
+            const { position, company, jobLocation, jobType, status } = data;
+            await authFetch.post("jobs", {
+                position,
+                company,
+                jobLocation,
+                jobType,
+                status,
+                userId: user._id,
+            });
+            dispatch({ type: CREATE_JOB_SUCCESS });
+            dispatch({ type: CLEAR_VALUES });
+        } catch (error) {
+            if (error.response.status === 401) return;
+            console.log(error);
+            dispatch({
+                type: CREATE_JOB_ERROR,
+                payload: { msg: error.response.data.msg },
+            });
+        }
+        clearAlert();
+    };
+
     // Local Storage Inicialização
     useEffect(() => {
         // const user = getItem("user");
@@ -187,7 +217,9 @@ const AppProvider = ({ children }) => {
                 ...state,
                 registerUser,
                 loginUser,
-                updateUser,               
+                logoutUser,
+                updateUser,
+                createJob,
             }}
         >
             {children}
