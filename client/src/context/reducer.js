@@ -13,9 +13,10 @@ import {
     CLEAR_VALUES,
     LOGOUT_USER,
     CREATE_JOB_BEGIN,
-    c,
-    CREATE_JOB_ERROR,
     CREATE_JOB_SUCCESS,
+    CREATE_JOB_ERROR,
+    GET_JOBS_BEGIN,
+    GET_JOBS_SUCCESS,
 } from "./actions";
 
 const reducer = (state, action) => {
@@ -149,13 +150,30 @@ const reducer = (state, action) => {
         };
     }
     if (action.type === CREATE_JOB_ERROR) {
-         return {
-             ...state,
-             isLoading: false,
-             showAlert: true,
-             alertType: "danger",
-             alertText: action.payload.msg,
-         };
+        return {
+            ...state,
+            isLoading: false,
+            showAlert: true,
+            alertType: "danger",
+            alertText: action.payload.msg,
+        };
+    }
+    if (action.type === GET_JOBS_BEGIN) {
+        return {
+            ...state,
+            isLoading: true,
+            showAlert: false,
+        };
+    }
+    if (action.type === GET_JOBS_SUCCESS) {
+        
+        return {
+            ...state,
+            isLoading: false,
+            jobs: action.payload.jobs,
+            totalJobs: action.payload.totalJobs,
+            numOfPages: action.payload.numOfPages,
+        };
     }
     throw new Error(`No such action: ${action.type}`);
 };

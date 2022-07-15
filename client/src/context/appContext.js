@@ -18,6 +18,8 @@ import {
     CREATE_JOB_BEGIN,
     CREATE_JOB_SUCCESS,
     CREATE_JOB_ERROR,
+    GET_JOBS_BEGIN,
+    GET_JOBS_SUCCESS,
 } from "./actions";
 
 export const initialState = {
@@ -38,6 +40,10 @@ export const initialState = {
     jobLocation: "",
     statusOptions: ["Interview", "Declined", "Pending"],
     status: "pending",
+    jobs: [],
+    totalJobs: 0,
+    page: 1,
+    numOfPages: 1,
 };
 
 const AppContext = createContext();
@@ -67,7 +73,7 @@ const AppProvider = ({ children }) => {
         (error) => {
             console.log(error);
             if (error.response.status === 401) {
-                logoutUser();
+                // logoutUser();
             }
             return Promise.reject(error);
         }
@@ -167,10 +173,10 @@ const AppProvider = ({ children }) => {
         }, 3000);
     };
 
-    const createJob = async (data) => {        
-        dispatch({type: CREATE_JOB_BEGIN });
+    const createJob = async (data) => {
+        dispatch({ type: CREATE_JOB_BEGIN });
         try {
-            const { user } = state;            
+            const { user } = state;
             const { position, company, jobLocation, jobType, status } = data;
             await authFetch.post("jobs", {
                 position,
@@ -191,6 +197,22 @@ const AppProvider = ({ children }) => {
             });
         }
         clearAlert();
+    };
+
+    const getJobs = async () => {
+        let url = `/jobs`;
+        dispatch({ type: GET_JOBS_BEGIN });        
+        try {
+            const { data } = await authFetch(url);            
+            const { jobs, totalJobs, numOfPages } = data;            
+            dispatch({
+                type: GET_JOBS_SUCCESS,
+                payload: { jobs, totalJobs, numOfPages },
+            });
+        } catch (error) {
+            console.log(error);
+            // logoutUser();
+        }
     };
 
     // Local Storage Inicialização
@@ -220,6 +242,7 @@ const AppProvider = ({ children }) => {
                 logoutUser,
                 updateUser,
                 createJob,
+                getJobs,
             }}
         >
             {children}
