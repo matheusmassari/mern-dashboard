@@ -83,8 +83,8 @@ const reducer = (state, action) => {
             isLoading: false,
             user: action.payload.user,
             token: action.payload.token,
-            userLocation: action.payload.token,
-            jobLocation: action.payload.userLocation,
+            userLocation: action.payload.location,
+            jobLocation: action.payload.location,
         };
     }
     if (action.type === LOGIN_USER_ERROR) {

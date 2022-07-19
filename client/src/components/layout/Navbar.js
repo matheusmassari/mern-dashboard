@@ -101,7 +101,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
                         justifyContent="space-between"
                     >
                         <Image
-                            src="jobstation-logo.svg"
+                            src="/jobstation-logo.svg"
                             ml={"1rem"}
                             h={"5rem"}
                             alt="JobStation Logo"

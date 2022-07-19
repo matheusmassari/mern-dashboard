@@ -1,4 +1,10 @@
-import { useReducer, createContext, useContext, useEffect } from "react";
+import {
+    useReducer,
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
 import reducer from "./reducer";
 import axios from "axios";
 import {
@@ -49,6 +55,7 @@ export const initialState = {
 const AppContext = createContext();
 const AppProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [userLoading, setUserLoading] = useState(true);
 
     // -----------------------------------------> Axios Setup
     // Axios Custom Instance
@@ -64,7 +71,7 @@ const AppProvider = ({ children }) => {
         (error) => {
             return Promise.reject(error);
         }
-    );
+    ); 
     // Response Interceptor
     authFetch.interceptors.response.use(
         (response) => {
@@ -73,7 +80,7 @@ const AppProvider = ({ children }) => {
         (error) => {
             console.log(error);
             if (error.response.status === 401) {
-                // logoutUser();
+                logoutUser();
             }
             return Promise.reject(error);
         }
@@ -199,23 +206,45 @@ const AppProvider = ({ children }) => {
         clearAlert();
     };
 
+    // const getJobs = async () => {
+    //     let url = `/jobs`;
+    //     dispatch({ type: GET_JOBS_BEGIN });
+    //     try {
+    //         const { data } = await authFetch(url);
+    //         const { jobs, totalJobs, numOfPages } = data;
+    //         dispatch({
+    //             type: GET_JOBS_SUCCESS,
+    //             payload: { jobs, totalJobs, numOfPages },
+    //         });
+    //     } catch (error) {
+    //         console.log(error);
+    //         logoutUser();
+    //     }
+    // };
+
     const getJobs = async () => {
-        let url = `/jobs`;
-        dispatch({ type: GET_JOBS_BEGIN });        
+
+        let url = `http://localhost:4000/api/v1/jobs`;
+        dispatch({ type: GET_JOBS_BEGIN });
         try {
-            const { data } = await authFetch(url);            
-            const { jobs, totalJobs, numOfPages } = data;            
+            const { data } = await axios(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${state.token}`,
+                },
+            });
+            const { jobs, totalJobs, numOfPages } = data;
             dispatch({
                 type: GET_JOBS_SUCCESS,
                 payload: { jobs, totalJobs, numOfPages },
             });
         } catch (error) {
             console.log(error);
-            // logoutUser();
         }
     };
 
     // Local Storage Inicialização
+
     useEffect(() => {
         // const user = getItem("user");
         // const token = getItem("token");
@@ -231,6 +260,7 @@ const AppProvider = ({ children }) => {
                 userLocation,
             },
         });
+        setUserLoading(false)
     }, []);
 
     return (
@@ -243,6 +273,7 @@ const AppProvider = ({ children }) => {
                 updateUser,
                 createJob,
                 getJobs,
+                userLoading
             }}
         >
             {children}

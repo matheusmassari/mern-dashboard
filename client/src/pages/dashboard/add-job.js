@@ -1,19 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useAppContext } from "../../context/appContext";
-import { useRouter } from "next/router";
 import Layout from "../../components/layout/Layout";
 import AddJobForm from "../../components/forms/AddJobForm";
+import AuthProvider from "../../context/AuthProvider"
 
 const AddJobPage = () => {
-    const { user } = useAppContext();
-    const router = useRouter();
-
-    useEffect(() => {
-        if (!user) {
-            router.push("/register");
-        }
-    }, [user]);
-    return <AddJobForm></AddJobForm>;
+    
+    return (
+        <AuthProvider>
+            <AddJobForm></AddJobForm>;
+        </AuthProvider>
+    );
 };
 
 AddJobPage.getLayout = function getLayout(page) {

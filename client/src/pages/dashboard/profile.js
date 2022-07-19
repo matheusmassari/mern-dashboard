@@ -1,21 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useAppContext } from "../../context/appContext";
 import { useRouter } from "next/router";
 import Layout from "../../components/layout/Layout";
 import ProfilePageForm from "../../components/forms/ProfilePageForm";
+import AuthProvider from "../../context/AuthProvider";
 
 const ProfilePage = () => {
-    const { user, updateUser, isLoading } = useAppContext();
-    const router = useRouter();
-
-    // User Check
-    useEffect(() => {
-        if (!user) {
-            router.push("/register");
-        }
-    }, [user]);
-
-    return <ProfilePageForm />;
+    return (
+        <AuthProvider>
+            <ProfilePageForm />;
+        </AuthProvider>
+    );
 };
 
 ProfilePage.getLayout = function getLayout(page) {

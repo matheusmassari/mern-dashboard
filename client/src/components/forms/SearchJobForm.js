@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     SimpleGrid,
     Heading,
@@ -16,7 +16,7 @@ import { addJobSchema } from "../../utils/addJobSchema";
 import { useAppContext } from "../../context/appContext";
 import CustomToast from "../feedback/CustomToast";
 
-const AddJobForm = () => {
+const SearchJobForm = () => {
     const {
         isLoading,
         showAlert,
@@ -25,31 +25,29 @@ const AddJobForm = () => {
         jobTypeOptions,
         statusOptions,
         isEditing,
-        createJob,
+        getJobs,
     } = useAppContext();
 
     const {
         register,
         handleSubmit,
-        reset,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(addJobSchema),
         mode: "onBlur",
     });
 
-    const addJobSubmit = (data) => {
-        if (isEditing) {
-            // Eventually editJob();
-            return;
-        }
-        createJob(data);
-        reset();
+    const searchJobSubmit = (data) => {
+        console.log(data);
     };
+
+    useEffect(() => {
+        getJobs();
+    }, []);
 
     return (
         <>
-            <form onSubmit={handleSubmit(addJobSubmit)}>
+            <form onSubmit={handleSubmit(searchJobSubmit)}>
                 <Box
                     backgroundColor="white"
                     margin="0 auto"
@@ -61,7 +59,7 @@ const AddJobForm = () => {
                     py="3rem"
                 >
                     <Heading color="gray.600" mb="2rem">
-                        Add Job
+                        Search Job Form
                     </Heading>
                     <SimpleGrid columns={3} spacing={10} spacingY="2rem">
                         <FormControl isRequired isInvalid={errors.name}>
@@ -153,4 +151,4 @@ const AddJobForm = () => {
     );
 };
 
-export default AddJobForm;
+export default SearchJobForm;

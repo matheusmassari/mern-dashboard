@@ -1,18 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useAppContext } from "../../context/appContext";
 import { useRouter } from "next/router";
 import Layout from "../../components/layout/Layout";
+import AuthProvider from "../../context/AuthProvider";
 
 const StatsPage = () => {
-    const { user } = useAppContext();
-    const router = useRouter();
-
-    useEffect(() => {
-        if (!user) {
-            router.push("/register");
-        }
-    }, [user]);
-    return <div>StatsPage</div>;
+    return (
+        <AuthProvider>
+            <div>stats page</div>
+        </AuthProvider>
+    );
 };
 
 StatsPage.getLayout = function getLayout(page) {
