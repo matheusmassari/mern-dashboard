@@ -69,8 +69,7 @@ const AppProvider = ({ children }) => {
             return config;
         },
         (error) => {
-            console.log(error);
-            logoutUser();
+            console.log(error);            
             return Promise.reject(error);
         }
     );

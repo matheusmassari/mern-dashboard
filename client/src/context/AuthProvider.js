@@ -11,7 +11,7 @@ const AuthProvider = ({ children }) => {
             router.push("/register");
             return;
         }
-    }, []);
+    }, [user]);
 
     if (user) {
         return children;
