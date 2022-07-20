@@ -25,7 +25,6 @@ const SearchJobForm = () => {
         jobTypeOptions,
         statusOptions,
         isEditing,
-        getJobs,
     } = useAppContext();
 
     const {
@@ -40,10 +39,6 @@ const SearchJobForm = () => {
     const searchJobSubmit = (data) => {
         console.log(data);
     };
-
-    useEffect(() => {
-        getJobs();
-    }, []);
 
     return (
         <>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppContext } from "../../context/appContext";
 import { useRouter } from "next/router";
 import Layout from "../../components/layout/Layout";
@@ -7,8 +7,14 @@ import JobCard from "../../components/cards/JobCard";
 import AuthProvider from "../../context/AuthProvider";
 
 const AllJobsPage = () => {
-    const { jobs } = useAppContext();
-    
+    const { jobs, getJobs, user } = useAppContext();
+
+    useEffect(() => {
+        if (user) {
+            getJobs();
+        }
+    }, []);
+
     return (
         <AuthProvider>
             <SearchJobForm />

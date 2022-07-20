@@ -21,6 +21,7 @@ import {
 
 const reducer = (state, action) => {
     if (action.type === LOCALSTORAGE_INIT) {
+        console.log("olá")
         return {
             ...state,
             user: action.payload.user ? JSON.parse(action.payload.user) : null,

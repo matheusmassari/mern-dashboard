@@ -8,7 +8,7 @@ const AddJobPage = () => {
     
     return (
         <AuthProvider>
-            <AddJobForm></AddJobForm>;
+            <AddJobForm></AddJobForm>
         </AuthProvider>
     );
 };

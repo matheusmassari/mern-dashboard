@@ -13,7 +13,11 @@ const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    return children;
+    if (user) {
+        return children;
+    } else {
+        <div>Loading</div>
+    }
 };
 
 export default AuthProvider;

@@ -8,7 +8,7 @@ import AuthProvider from "../../context/AuthProvider";
 const ProfilePage = () => {
     return (
         <AuthProvider>
-            <ProfilePageForm />;
+            <ProfilePageForm />
         </AuthProvider>
     );
 };

@@ -150,7 +150,7 @@ const AddJobForm = () => {
                 <CustomToast alertType={alertType} alertText={alertText} />
             )}
         </>
-    );
-};
+    )
+}
 
 export default AddJobForm;

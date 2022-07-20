@@ -69,9 +69,11 @@ const AppProvider = ({ children }) => {
             return config;
         },
         (error) => {
+            console.log(error);
+            logoutUser();
             return Promise.reject(error);
         }
-    ); 
+    );
     // Response Interceptor
     authFetch.interceptors.response.use(
         (response) => {
@@ -206,33 +208,11 @@ const AppProvider = ({ children }) => {
         clearAlert();
     };
 
-    // const getJobs = async () => {
-    //     let url = `/jobs`;
-    //     dispatch({ type: GET_JOBS_BEGIN });
-    //     try {
-    //         const { data } = await authFetch(url);
-    //         const { jobs, totalJobs, numOfPages } = data;
-    //         dispatch({
-    //             type: GET_JOBS_SUCCESS,
-    //             payload: { jobs, totalJobs, numOfPages },
-    //         });
-    //     } catch (error) {
-    //         console.log(error);
-    //         logoutUser();
-    //     }
-    // };
-
     const getJobs = async () => {
-
-        let url = `http://localhost:4000/api/v1/jobs`;
+        let url = `/jobs`;
         dispatch({ type: GET_JOBS_BEGIN });
         try {
-            const { data } = await axios(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${state.token}`,
-                },
-            });
+            const { data } = await authFetch(url);
             const { jobs, totalJobs, numOfPages } = data;
             dispatch({
                 type: GET_JOBS_SUCCESS,
@@ -240,8 +220,29 @@ const AppProvider = ({ children }) => {
             });
         } catch (error) {
             console.log(error);
+            logoutUser();
         }
     };
+
+    // const getJobs = async () => {
+    //     let url = `http://localhost:4000/api/v1/jobs`;
+    //     dispatch({ type: GET_JOBS_BEGIN });
+    //     try {
+    //         const { data } = await axios(url, {
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 Authorization: `Bearer ${state.token}`,
+    //             },
+    //         });
+    //         const { jobs, totalJobs, numOfPages } = data;
+    //         dispatch({
+    //             type: GET_JOBS_SUCCESS,
+    //             payload: { jobs, totalJobs, numOfPages },
+    //         });
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
 
     // Local Storage Inicialização
 
@@ -260,7 +261,7 @@ const AppProvider = ({ children }) => {
                 userLocation,
             },
         });
-        setUserLoading(false)
+        setUserLoading(false);
     }, []);
 
     return (
@@ -273,7 +274,7 @@ const AppProvider = ({ children }) => {
                 updateUser,
                 createJob,
                 getJobs,
-                userLoading
+                userLoading,
             }}
         >
             {children}
