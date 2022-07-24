@@ -16,7 +16,7 @@ const AuthProvider = ({ children }) => {
     if (user) {
         return children;
     } else {
-        <div>Loading</div>
+        <div>Loading</div>;
     }
 };
 

@@ -26,10 +26,14 @@ import {
     CREATE_JOB_ERROR,
     GET_JOBS_BEGIN,
     GET_JOBS_SUCCESS,
+    GET_USER_INFO_BEGIN,
+    GET_USER_INFO_SUCCESS,
+    GET_USER_INFO_ERROR,
 } from "./actions";
 
 export const initialState = {
     isLoading: false,
+    isUserLoading: true,
     showAlert: false,
     alertText: "",
     alertType: "",
@@ -69,7 +73,7 @@ const AppProvider = ({ children }) => {
             return config;
         },
         (error) => {
-            console.log(error);            
+            console.log(error);
             return Promise.reject(error);
         }
     );
@@ -245,10 +249,26 @@ const AppProvider = ({ children }) => {
 
     // Local Storage Inicialização
 
+    const getUserInfo = async () => {
+        let url = `/auth/me`;
+        dispatch({ type: GET_USER_INFO_BEGIN });
+        try {
+            const { data } = await authFetch(url);
+            dispatch({ type: GET_USER_INFO_SUCCESS, payload: data });
+            console.log(data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
-        // const user = getItem("user");
-        // const token = getItem("token");
-        // const userLocation = getItem("location");
+        const token = localStorage.getItem("token");
+        if (token && state.user) {
+            getUserInfo();
+        }
+    }, [state.user]);
+
+    useEffect(() => {
         const token = localStorage.getItem("token");
         const user = localStorage.getItem("user");
         const userLocation = localStorage.getItem("location");

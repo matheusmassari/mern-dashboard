@@ -17,11 +17,13 @@ import {
     CREATE_JOB_ERROR,
     GET_JOBS_BEGIN,
     GET_JOBS_SUCCESS,
+    GET_USER_INFO_BEGIN,
+    GET_USER_INFO_SUCCESS,
+    GET_USER_INFO_ERROR,
 } from "./actions";
 
 const reducer = (state, action) => {
     if (action.type === LOCALSTORAGE_INIT) {
-        console.log("olá")
         return {
             ...state,
             user: action.payload.user ? JSON.parse(action.payload.user) : null,
@@ -167,13 +169,25 @@ const reducer = (state, action) => {
         };
     }
     if (action.type === GET_JOBS_SUCCESS) {
-        
         return {
             ...state,
             isLoading: false,
             jobs: action.payload.jobs,
             totalJobs: action.payload.totalJobs,
             numOfPages: action.payload.numOfPages,
+        };
+    }
+    if (action.type === GET_USER_INFO_BEGIN) {
+        return {
+            ...state,
+            isUserLoading: true,
+        };
+    }
+    if (action.type === GET_USER_INFO_SUCCESS) {
+        return {
+            ...state,
+            isUserLoading: false,
+            
         };
     }
     throw new Error(`No such action: ${action.type}`);
