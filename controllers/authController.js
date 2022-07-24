@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import { BadRequestError, UnauthenticatedError } from "../errors/index.js";
 import { StatusCodes } from "http-status-codes";
+import jwt from "jsonwebtoken";
 
 const register = async (req, res) => {
     const { name, email, password } = req.body;
@@ -60,4 +61,28 @@ const updateUser = async (req, res) => {
     res.status(StatusCodes.OK).json({ user, token, location: user.location });
 };
 
-export { register, login, updateUser };
+const getUserInfo = async (req, res) => {
+    if (req.headers && req.headers.authorization) {
+        var authorization = req.headers.authorization.split(" ")[1],
+            decoded;
+        try {
+            decoded = jwt.verify(authorization, process.env.JWT_SECRET);
+        } catch (e) {
+            throw new UnauthenticatedError("Invalid Credentials");
+        }
+        var userId = decoded.userId;
+        const { name, email, lastName, location, _id } = await User.findOne({
+            _id: userId,
+        });
+        res.status(StatusCodes.OK).json({
+            _id,
+            name,
+            email,
+            lastName,
+            location,
+        });
+    }
+    return res.send(500);
+};
+
+export { register, login, updateUser, getUserInfo };
