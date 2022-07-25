@@ -26,10 +26,7 @@ const reducer = (state, action) => {
     if (action.type === LOCALSTORAGE_INIT) {
         return {
             ...state,
-            user: action.payload.user ? JSON.parse(action.payload.user) : null,
             token: action.payload.token,
-            userLocation: action.payload.userLocation || "",
-            jobLocation: action.payload.userLocation || "",
         };
     }
     if (action.type === CLEAR_ALERT) {
@@ -187,7 +184,7 @@ const reducer = (state, action) => {
         return {
             ...state,
             isUserLoading: false,
-            
+            user: action.payload.data,
         };
     }
     throw new Error(`No such action: ${action.type}`);

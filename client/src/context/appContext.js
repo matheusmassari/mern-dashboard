@@ -105,8 +105,7 @@ const AppProvider = ({ children }) => {
                 type: REGISTER_USER_SUCCESS,
                 payload: { user, token, location },
             });
-            addUserToLocalStorage({ user, token, location });
-            // setItem("user", { user, token, location });
+            addUserToLocalStorage({ token });
         } catch (error) {
             console.log(error.response);
             dispatch({
@@ -124,13 +123,12 @@ const AppProvider = ({ children }) => {
                 currentUser
             );
             console.log(response);
-            const { user, token, location } = response.data;
+            const { token, user, location } = response.data;
             dispatch({
                 type: LOGIN_USER_SUCCESS,
-                payload: { user, token, location },
+                payload: { token, user, location },
             });
-            // setItem({ user, token, location });
-            addUserToLocalStorage({ user, token, location });
+            addUserToLocalStorage({ token });
         } catch (error) {
             console.log(error.response);
             dispatch({
@@ -167,17 +165,9 @@ const AppProvider = ({ children }) => {
         clearAlert();
     };
 
-    const addUserToLocalStorage = ({ user, token, location }) => {
-        localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("token", token);
-        localStorage.setItem("location", location);
-    };
+    const addUserToLocalStorage = ({ token }) => localStorage.setItem("token", token);
 
-    const removeUserFromLocalStorage = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.removeItem("location");
-    };
+    const removeUserFromLocalStorage = () => localStorage.removeItem("token");
 
     const clearAlert = () => {
         setTimeout(() => {
@@ -226,59 +216,31 @@ const AppProvider = ({ children }) => {
             logoutUser();
         }
     };
-
-    // const getJobs = async () => {
-    //     let url = `http://localhost:4000/api/v1/jobs`;
-    //     dispatch({ type: GET_JOBS_BEGIN });
-    //     try {
-    //         const { data } = await axios(url, {
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 Authorization: `Bearer ${state.token}`,
-    //             },
-    //         });
-    //         const { jobs, totalJobs, numOfPages } = data;
-    //         dispatch({
-    //             type: GET_JOBS_SUCCESS,
-    //             payload: { jobs, totalJobs, numOfPages },
-    //         });
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-
-    // Local Storage Inicialização
-
+    
     const getUserInfo = async () => {
         let url = `/auth/me`;
         dispatch({ type: GET_USER_INFO_BEGIN });
         try {
             const { data } = await authFetch(url);
-            dispatch({ type: GET_USER_INFO_SUCCESS, payload: data });
-            console.log(data);
+            dispatch({ type: GET_USER_INFO_SUCCESS, payload: { data } });            
         } catch (error) {
             console.log(error);
         }
     };
 
+    // GET USER INFO /USERS/ME -> IF(STATE.TOKEN)
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token && state.user) {
+        if (state.token) {
             getUserInfo();
         }
-    }, [state.user]);
+    }, [state.token]);
 
+    // Local Storage - TOKEN CHECK/INIT
     useEffect(() => {
         const token = localStorage.getItem("token");
-        const user = localStorage.getItem("user");
-        const userLocation = localStorage.getItem("location");
         dispatch({
             type: LOCALSTORAGE_INIT,
-            payload: {
-                token,
-                user,
-                userLocation,
-            },
+            payload: { token },
         });
         setUserLoading(false);
     }, []);
